@@ -6,18 +6,17 @@ app = Flask(__name__)
 @app.route('/', methods=['GET'])
 def index():
     get = request.args.get('Ping')
-
-    if 'rm' in get:
-        return jsonify({'msg':"don't remove the file"})
-
-    if get:
-        command = 'ping -c 4 ' + get
-        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, text=True)
-        rt = render_template('index.html', pinganswer=result)
-    else:
-        rt = render_template('index.html')
+    try:
+        if get:
+            command = 'ping -c 4 ' + get
+            result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, text=True)
+            rt = render_template('index.html', pinganswer=result)
+        else:
+            rt = render_template('index.html')
+    except:
+        render_template('index.html')
 
     return rt
 
 if __name__ == '__main__':
-    app.run(port='9981')
+    app.run(host='0.0.0.0', port='4000')
